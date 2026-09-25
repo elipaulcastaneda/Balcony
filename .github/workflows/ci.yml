@@ -1,0 +1,37 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install frontend deps (pnpm workspace)
+        run: |
+          pnpm -w install
+      - name: Type check frontend
+        run: pnpm --filter ./apps/web run type-check
+      - name: Lint frontend
+        run: pnpm --filter ./apps/web run lint
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install backend deps
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install -r services/api/requirements.txt
+      - name: Run backend tests
+        run: |
+          . .venv/bin/activate
+          pytest -q

@@ -1,0 +1,17 @@
+.venv/
+.env
+venv/
+ENV/
+env/
+node_modules/
+dist/
+/.pytest_cache/
+/.mypy_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.cache/
+.venv/
+.DS_Store
+/apps/web/.next/
